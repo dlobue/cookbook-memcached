@@ -1,0 +1,11 @@
+
+USER="<%= @user || node.memcached.user %>"
+PORT="<%= @port || node.memcached.port %>"
+MAX_MEM="<%= @max_mem || node.memcached.max_mem %>"
+MAX_CONNS="<%= @max_conns || node.memcached.max_conns %>"
+MAX_SEQ_REQS="<%= @max_seq_reqs || node.memcached.max_seq_reqs %>"
+MEM_CHUNK_MULTIPLIER="<%= @mem_chunk_multiplier || node.memcached.mem_chunk_multiplier %>"
+NUM_THREADS="<%= @num_threads || node.memcached.num_threads %>"
+
+EXTRA_ARGS="<%= @extra_args || node.memcached.extra_args %>"
+

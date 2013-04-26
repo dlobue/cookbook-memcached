@@ -1,0 +1,39 @@
+
+description "memcached"
+author "Dominic LoBue <dominic.lobue@gmail.com>"
+
+start on startup
+stop on shutdown
+
+instance $config
+env config=
+env default_config=<%=node.memcached.default_config%>
+
+script
+    if [ -f "$default_config" ]; then
+        . "$default_config"
+    fi
+
+    if [ -n "$config" ]; then
+        if [ -f "<%=node.memcached.instances.conf_dir%>/${config}" ]; then
+            . "<%=node.memcached.instances.conf_dir%>/${config}"
+        else
+            logger -t memcached -- "custom configuration file missing"
+            stop; exit 1
+        fi
+    fi
+
+    [ -n "$USER" ]&& ARGS="$ARGS -u $USER" || echo "no user"
+    [ -n "$PORT" ]&& ARGS="$ARGS -p $PORT" || echo "no port"
+    [ -n "$MAX_MEM" ]&& ARGS="$ARGS -m $MAX_MEM" || echo "no  max_mem"
+    [ -n "$MAX_CONNS" ]&& ARGS="$ARGS -c $MAX_CONNS" || echo "no max_conns"
+    [ -n "$MAX_SEQ_REQS" ]&& ARGS="$ARGS -R $MAX_SEQ_REQS" || echo "no max_seq_reqs"
+    [ -n "$MEM_CHUNK_MULTIPLIER" ]&& ARGS="$ARGS -f $MEM_CHUNK_MULTIPLIER" || echo "no mem_chunk_multiplier"
+    [ -n "$NUM_THREADS" ]&& ARGS="$ARGS -t $NUM_THREADS" || echo "no num_threads"
+    [ -n "$EXTRA_ARGS" ]&& ARGS="$ARGS $EXTRA_ARGS" || echo "no extra_args"
+
+    logger -t memcached -- "starting memcached with args $ARGS"
+
+    exec /usr/bin/memcached $ARGS
+end script
+
