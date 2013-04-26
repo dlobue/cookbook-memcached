@@ -4,4 +4,5 @@ requires my Promise object (found in https://github.com/dlobue/chef-solo-client)
 requires lazy subscriptions
 uses upstart
 meant for ubuntu
+requires notify_hub and a notify_hub[last_call] resource to run last
 
